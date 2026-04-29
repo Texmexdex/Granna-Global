@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="32dp"
+    android:background="#000000">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Granna"
+        android:textSize="48sp"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:layout_marginBottom="24dp" />
+
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Starting..."
+        android:textSize="22sp"
+        android:textColor="#AAAAAA"
+        android:gravity="center"
+        android:layout_marginBottom="48dp" />
+
+    <Button
+        android:id="@+id/btnCall"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:text="MAKE A CALL"
+        android:textSize="28sp"
+        android:textColor="#000000"
+        android:backgroundTint="#00CC44"
+        android:layout_marginBottom="16dp" />
+
+</LinearLayout>
