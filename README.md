@@ -1,6 +1,6 @@
-# Granna 📞
+# Granna-Global 📞
 
-**A voice-controlled phone dialer built for my Granna — because she should be able to call who she wants, when she wants.**
+**A voice-controlled phone dialer built for Granna — because she should be able to call who she wants, when she wants.**
 
 ---
 
