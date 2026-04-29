@@ -1,57 +1,55 @@
 # Granna 📞
 
-**A voice-controlled phone dialer built for my grandmother — because Parkinson's shouldn't take away her independence.**
+**A voice-controlled phone dialer built for my Granna — because she should be able to call who she wants, when she wants.**
 
 ---
 
 ## The Story
 
-My grandmother has Parkinson's disease. The tremors, the stiffness, the way her hands don't always do what she wants them to — it's made something as simple as calling her family feel impossible. She'd look at her phone and feel defeated before she even started. Not because she didn't want to reach out, but because the barrier between her and the people she loves had become too high.
+Granna is what me and my brother call our grandmother. She has Parkinson's, and it's made using her phone really difficult. She was sold one of those "easy" flip phones marketed at elderly people — it's genuinely awful to use, even for me.
 
-That's not okay.
+Every day she calls me by accident when she's trying to reach someone else. She's embarrassed when she hears my voice. She asked me to come over one day to help her call an old friend she went to school with. When I got there she told me she'd been trying to figure out how to call her for months, and wasn't even sure if she was still alive.
 
-She is sharp, warm, funny, and full of life. She deserves to pick up the phone and call whoever she wants, whenever she wants — without needing to ask for help, without fumbling through menus, without feeling like her body has taken something from her.
+That was enough for me. I built Granna.
 
-So I built Granna.
+She deserves to call her friends. She deserves her independence. She's super awesome and this is the least I can do.
 
 ---
 
 ## What It Does
 
-Granna removes every physical barrier between her and a phone call. Here's the full flow:
+One button. Say a name. Make a call.
 
-1. **She presses a single large button** — a custom-built physical button sitting on her table, no touchscreen required.
-2. **Her phone wakes up automatically**, even from sleep or lock screen.
+1. **She presses a single large physical button** on her table — no touchscreen involved
+2. **Her phone wakes up** automatically, even from sleep
 3. A friendly voice asks: *"Who would you like to call?"*
-4. **She says the name** — just the name, naturally, the way she'd say it to anyone.
-5. The app confirms back: *"You want to call [Name] — is that correct?"*
-6. She says **"Yes"** and the call goes through. Or **"No"** to try again.
+4. **She says the name** — naturally, however she'd say it
+5. The app reads it back: *"You want to call [Name] — is that correct?"*
+6. She says **"Yes"** and the call goes through. **"No"** to try again.
 
-That's it. One button. One spoken name. One phone call.
-
-No touchscreen. No tiny icons. No menus. No passwords. No frustration.
+No menus. No tiny buttons. No passwords. No frustration.
 
 ---
 
 ## How It Works
 
-The system has two parts that talk to each other over Bluetooth Low Energy (BLE).
+Two parts that talk to each other over Bluetooth Low Energy (BLE).
 
 ### The Button (ESP32 Hardware)
-A small microcontroller — an Aitrip ESP32-S3 — sits inside a physical button on her table. When she presses it, the ESP32 sends a `PRESS` signal over BLE to her Android phone. The LED on the device blinks slowly while scanning for the phone, and stays solid when connected, so it's always easy to see if it's ready.
+An Aitrip ESP32-S3 microcontroller lives inside a physical button on her table. Press it, and the ESP32 sends a `PRESS` signal over BLE to her Android phone. The onboard LED blinks while it's scanning for the phone and goes solid when it's connected — easy to see at a glance if it's ready.
 
 ### The Android App
-A foreground service (`ButtonService`) runs silently in the background at all times, listening for the BLE signal. When the button press arrives:
+A background service (`ButtonService`) runs silently at all times, listening for the BLE signal. When the button is pressed:
 
-- The screen wakes up immediately
+- The screen wakes up
 - `DialerActivity` launches full-screen with large, high-contrast text
-- A custom recorded voice (warm, clear, unhurried) asks who she'd like to call
-- Android's speech recognition listens for a name
-- The app fuzzy-matches what it heard against her phone contacts — so "call Mum" or "Mum" or even a partial name will find the right person
-- It reads the name back and asks for confirmation using the same warm recorded voice
-- On "Yes", the call is placed automatically
+- A warm recorded voice asks who she'd like to call
+- Android speech recognition listens for a name
+- The app fuzzy-matches what it heard against her contacts — "Mum", "call Mum", a first name, whatever — and finds the right person
+- It reads the name back and asks for confirmation
+- She says yes, the call is placed
 
-The app also starts automatically when the phone reboots, so it's always ready without her needing to do anything.
+The service also starts automatically on reboot, so it's always ready without her needing to do anything.
 
 ---
 
@@ -60,11 +58,11 @@ The app also starts automatically when the phone reboots, so it's always ready w
 ```
 granna_app/
 ├── app/src/main/java/com/sovereignvoice/granna/
-│   ├── MainActivity.kt          # Entry point, permission handling, service launcher
+│   ├── MainActivity.kt          # Entry point, permissions, service launcher
 │   ├── DialerActivity.kt        # Full-screen voice dialer UI and logic
 │   ├── ButtonService.kt         # BLE GATT server, foreground service, button listener
-│   ├── ContactHelper.kt         # Reads phone contacts, fuzzy name matching
-│   └── BootReceiver.kt          # Auto-starts the service on device reboot
+│   ├── ContactHelper.kt         # Reads contacts, fuzzy name matching
+│   └── BootReceiver.kt          # Auto-starts the service on reboot
 │
 ├── app/src/main/res/
 │   ├── layout/                  # Large-text, high-contrast UI layouts
@@ -86,18 +84,18 @@ granna_app/
 |------|---------|
 | Microcontroller | Aitrip ESP32-S3 DevKit |
 | Button pin | GPIO 13 (internal pull-up, active LOW) |
-| LED pin | GPIO 48 (onboard RGB, used as status indicator) |
+| LED pin | GPIO 48 (onboard RGB, status indicator) |
 | BLE role | Client — scans for and connects to the Android app |
 
-**Wiring:** One side of the button to GPIO 13, the other to GND. That's it.
+**Wiring:** One side of the button to GPIO 13, the other to GND.
 
 ---
 
 ## BLE Communication
 
-The Android app advertises as a BLE peripheral named `GrannaListener`. The ESP32 scans for this name, connects, and writes `"PRESS"` to the GATT characteristic when the button is held down.
+The Android app advertises as a BLE peripheral named `GrannaListener`. The ESP32 scans for it, connects, and writes `"PRESS"` to the GATT characteristic when the button is held.
 
-Both sides share the same UUIDs:
+Both sides use the same UUIDs:
 - **Service:** `12345678-1234-1234-1234-123456789abc`
 - **Characteristic:** `12345678-1234-1234-1234-123456789abd`
 
@@ -119,16 +117,8 @@ Both sides share the same UUIDs:
 
 ---
 
-## Why This Matters
+## Granna Global
 
-Independence isn't just practical — it's dignity. When someone with Parkinson's can't make a phone call without help, it's not just inconvenient. It chips away at their sense of self. It makes them feel like a burden. It makes them feel like the world is slowly closing in.
+This is just the start. The goal is to keep building — giving back as much independence as possible to people who deserve it.
 
-Granna is a small piece of technology, but what it gives back is enormous: the ability to reach out to the people you love, on your own terms, in your own time, without asking anyone for help.
-
-She presses a button. She says a name. She hears a familiar voice.
-
-That's everything.
-
----
-
-*Built with love, for Granna.*
+*For Granna. She's super awesome.*
