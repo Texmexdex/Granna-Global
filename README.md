@@ -6,13 +6,11 @@
 
 ## The Story
 
-Granna is what me and my brother call our grandmother. She has Parkinson's, and it's made using her phone really difficult. She was sold one of those "easy" flip phones marketed at elderly people — it's genuinely awful to use, even for me.
+Granna is my grandmother, who has been learning to live with Parkinson's, and it's made using her phone really difficult. She was sold one of those "easy" flip phones marketed to elderly and surprised me how little features it actually had to be "assistive" in any sort of way.... if anything it was the opposite which, kindof pissed me off to be honest. it wasnt user friendly at all, had no voice assist, no functions to actually help with the struggles or problem points that anyone i know who arnt the most tech savey might struggle with, and certainly not for anyone dealing with any sort of dissability which i had thought would be their main purpose (especially as thats how its advertised...) nearly impossible to use.
 
-Every day she calls me by accident when she's trying to reach someone else. She's embarrassed when she hears my voice. She asked me to come over one day to help her call an old friend she went to school with. When I got there she told me she'd been trying to figure out how to call her for months, and wasn't even sure if she was still alive.
+Anyways, sometimes when I get a call from her, I can tell right away she was trying to call someone else as she will reluctantly tell me so while being obviously (and for no good reason) embarrased, and I can tell how much it discourages her. Then the other day when it happened, she asked me if i didnt mind and had a chance to come over and help her call an old friend she went to school with. When I got there she told me she'd been trying to figure out how to call her for months, and wasn't even sure if she was still alive, which was like... yeah too much, so, Granna-Global!
 
-That was enough for me. I built Granna.
-
-She deserves to call her friends. She deserves her independence. She's super awesome and this is the least I can do.
+She is more then capable of talking to who she wants when she wants, her independence, dignity, and confidence that she CAN do whatever, as its 2026, and we have the ability to work around and overcome any sort of difficulties, and when we run into ones we are currently incapable of that we do what we can or put forth the effort towards what we want, as every attempt needs a start. She's super awesome and has alot to say lol so hopefully this can help her say it.
 
 ---
 
@@ -45,7 +43,7 @@ A background service (`ButtonService`) runs silently at all times, listening for
 - `DialerActivity` launches full-screen with large, high-contrast text
 - A warm recorded voice asks who she'd like to call
 - Android speech recognition listens for a name
-- The app fuzzy-matches what it heard against her contacts — "Mum", "call Mum", a first name, whatever — and finds the right person
+- The app fuzzy-matches what it heard against her contacts — "Mom", "call Mom", a first name, whatever — and finds the right person
 - It reads the name back and asks for confirmation
 - She says yes, the call is placed
 
@@ -56,7 +54,7 @@ The service also starts automatically on reboot, so it's always ready without he
 ## Project Structure
 
 ```
-granna_app/
+granna_global/
 ├── app/src/main/java/com/sovereignvoice/granna/
 │   ├── MainActivity.kt          # Entry point, permissions, service launcher
 │   ├── DialerActivity.kt        # Full-screen voice dialer UI and logic
